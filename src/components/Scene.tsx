@@ -27,7 +27,7 @@ export function Scene() {
     >
       <Suspense fallback={null}>
         <ambientLight intensity={0.07} color="#ffffff" />
-        <pointLight position={[0, 0, 6]}  color="#ffffff" intensity={0.5}  distance={15} decay={1.5} />
+        <pointLight position={[0, 0, 6]}  color="#ffffff" intensity={0.3}  distance={15} decay={1.5} />
         <pointLight position={[-4, 0, 3]} color="#ffffff" intensity={0.25} distance={12} decay={1.5} />
         <pointLight position={[4, 0, 3]}  color="#ffffff" intensity={0.15} distance={12} decay={1.5} />
 
@@ -43,11 +43,11 @@ export function Scene() {
 
         <Particles />
 
-        <Environment preset="studio" background={false} environmentIntensity={0.12} />
+        <Environment preset="studio" background={false} environmentIntensity={0.06} blur={1} />
 
         <EffectComposer>
           <Bloom
-            luminanceThreshold={0.8}
+            luminanceThreshold={0.88}
             luminanceSmoothing={0.9}
             intensity={0.35}
             mipmapBlur

@@ -91,9 +91,9 @@ export function Robot() {
       ) {
         child.material = new THREE.MeshStandardMaterial({
           color: new THREE.Color('#1a1a2e'),
-          metalness: 0.95,
-          roughness: 0.05,
-          envMapIntensity: 4.0,
+          metalness: 0.9,
+          roughness: 0.35,
+          envMapIntensity: 0.5,
         })
         return
       }
@@ -188,12 +188,16 @@ export function Robot() {
           child.material = new THREE.MeshStandardMaterial({
             color: new THREE.Color('#141420'),
             metalness: 0.75,
-            roughness: 0.2,
+            roughness: 0.55,
           })
         }
       }
 
-      // Default — original GLB material kept (color spaces already fixed above)
+      // Default — floor roughness on original material to kill sharp specular hot spots
+      if (mat && mat.roughness < 0.45) {
+        mat.roughness = 0.45
+        mat.needsUpdate = true
+      }
     })
   }, [scene])
 
