@@ -5,7 +5,7 @@ export function Navbar() {
     <nav className="fixed top-0 left-0 right-0 z-50 h-16 flex items-center justify-between px-6 lg:px-12 bg-[#0a0a0f]/80 backdrop-blur-md border-b border-white/[0.06]">
       <div className="flex items-center gap-2">
         <span className="w-2 h-2 rounded-full bg-[#EF9F27] shadow-[0_0_8px_#EF9F27]" />
-        <span className="font-mono text-white font-semibold tracking-tight text-lg">
+        <span className="font-['Orbitron'] text-white font-semibold tracking-tight text-lg">
           AgentPatrol
         </span>
       </div>
@@ -21,10 +21,6 @@ export function Navbar() {
           Docs
         </a>
       </div>
-
-      <button className="px-4 py-2 bg-[#4a3fad] hover:bg-[#5a4fbd] text-white text-sm font-medium rounded-lg transition-colors shadow-[0_0_20px_rgba(74,63,173,0.4)]">
-        Get Early Access
-      </button>
     </nav>
   )
 }

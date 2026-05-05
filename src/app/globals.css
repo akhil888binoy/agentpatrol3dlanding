@@ -8,7 +8,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-orbitron), sans-serif;
   --font-mono: var(--font-geist-mono);
 }
 
@@ -16,6 +16,16 @@ body {
   background: var(--background);
   color: var(--foreground);
   overflow-x: hidden;
+  font-family: var(--font-orbitron), sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-orbitron), sans-serif;
+  letter-spacing: 0.05em;
+}
+
+code, pre {
+  font-family: var(--font-geist-mono), 'DM Mono', 'JetBrains Mono', monospace;
 }
 
 html {

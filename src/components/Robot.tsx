@@ -12,6 +12,7 @@ const isTouchDevice =
 
 export function Robot() {
   const groupRef = useRef<THREE.Group>(null)
+  const headBoneRef = useRef<THREE.Object3D | null>(null)
   const { scene } = useGLTF(ROBOT_PATH)
   const { pointer } = useThree()
 
@@ -199,6 +200,24 @@ export function Robot() {
         mat.needsUpdate = true
       }
     })
+
+    // Log all node names to identify head bone
+    console.group('=== ROBOT NODES ===')
+    scene.traverse((child) => console.log(child.type, child.name))
+    console.groupEnd()
+
+    // Find head bone by common rig naming conventions
+    scene.traverse((child) => {
+      if (headBoneRef.current) return
+      const n = child.name.toLowerCase()
+      if (
+        n === 'head' || n === 'mixamorighead' || n === 'bip_head' ||
+        n === 'bip01_head' || n === 'head_jnt' || n.endsWith('_head') ||
+        (n.includes('head') && !n.includes('headlight'))
+      ) {
+        headBoneRef.current = child
+      }
+    })
   }, [scene])
 
   useFrame((state) => {
@@ -207,16 +226,25 @@ export function Robot() {
     if (isTouchDevice) {
       groupRef.current.rotation.y += 0.004
     } else {
+      // Body turns to follow mouse — ±40° horizontal, ±20° vertical
       groupRef.current.rotation.y +=
-        (pointer.x * 0.2 - groupRef.current.rotation.y) * 0.04
+        (pointer.x * 0.7 - groupRef.current.rotation.y) * 0.06
       groupRef.current.rotation.x +=
-        (-pointer.y * 0.1 - groupRef.current.rotation.x) * 0.04
+        (-pointer.y * 0.35 - groupRef.current.rotation.x) * 0.06
+
+      // Head adds extra rotation on top of body if bone is found
+      if (headBoneRef.current) {
+        headBoneRef.current.rotation.y +=
+          (pointer.x * 0.5 - headBoneRef.current.rotation.y) * 0.08
+        headBoneRef.current.rotation.x +=
+          (-pointer.y * 0.3 - headBoneRef.current.rotation.x) * 0.08
+      }
     }
-    groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.8) * 0.06
+    groupRef.current.position.y = -0.35 + Math.sin(state.clock.elapsedTime * 0.8) * 0.06
   })
 
   return (
-    <group ref={groupRef} position={[0, -1.2, 0]} scale={[2, 2, 2]}>
+    <group ref={groupRef} position={[0, -0.35, 0]} scale={[2, 2, 2]}>
       <primitive object={scene} />
     </group>
   )

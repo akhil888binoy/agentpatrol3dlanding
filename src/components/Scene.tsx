@@ -1,11 +1,10 @@
 'use client'
 import { Canvas } from '@react-three/fiber'
 import { Suspense } from 'react'
-import { Environment, ContactShadows } from '@react-three/drei'
+import { Environment } from '@react-three/drei'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
 import * as THREE from 'three'
 import { Robot } from './Robot'
-import { Particles } from './Particles'
 
 export function Scene() {
   return (
@@ -32,16 +31,6 @@ export function Scene() {
         <pointLight position={[4, 0, 3]}  color="#ffffff" intensity={0.15} distance={12} decay={1.5} />
 
         <Robot />
-
-        <ContactShadows
-          position={[0, -1.5, 0]}
-          opacity={0.3}
-          scale={8}
-          blur={2.5}
-          color="#111111"
-        />
-
-        <Particles />
 
         <Environment preset="studio" background={false} environmentIntensity={0.06} blur={1} />
 

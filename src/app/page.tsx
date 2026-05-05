@@ -15,22 +15,22 @@ export default function Home() {
       {/* HERO — full viewport, robot centered as background */}
       <div className="relative w-full h-screen">
 
-        {/* Canvas fills entire hero — clipPath crops legs at bottom */}
+        {/* Canvas fills entire hero */}
         <div
           className="absolute inset-0 z-0"
-          style={{ background: 'transparent', clipPath: 'inset(0 0 12% 0)' }}
+          style={{ background: 'transparent' }}
         >
           <SceneNoSSR />
         </div>
 
         {/* Radial dark overlay — bright at center, dark at edges for text readability */}
-        <div
+        {/* <div
           className="absolute inset-0 z-5 pointer-events-none"
           style={{
             background:
               "radial-gradient(ellipse at center, transparent 30%, rgba(10,10,15,0.75) 100%)",
           }}
-        />
+        /> */}
 
         {/* Text overlaid on canvas */}
         {/* <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
@@ -55,8 +55,8 @@ export default function Home() {
           </div>
         </div> */}
 
-        {/* Bottom gradient — blends hero into sections below */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-[#0a0a0f] to-transparent z-10" />
+        {/* Bottom gradient — fades robot lower body into page background */}
+        <div className="absolute bottom-0 left-0 right-0 h-48 bg-linear-to-t from-[#0a0a0f] to-transparent z-10" />
       </div>
 
       {/* SECTIONS BELOW — full width stacked on dark background */}
