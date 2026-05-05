@@ -1,65 +1,73 @@
-import Image from "next/image";
+import { Navbar } from "@/components/Navbar";
+import { Section2 } from "@/components/sections/Section2";
+import { Section3 } from "@/components/sections/Section3";
+import { Section4 } from "@/components/sections/Section4";
+import { FeatureCards } from "@/components/FeatureCards";
+import { Pricing } from "@/components/Pricing";
+import { CTA } from "@/components/CTA";
+import { SceneWrapper as SceneNoSSR } from "@/components/SceneWrapper";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <main className="bg-[#0a0a0f]">
+      <Navbar />
+
+      {/* HERO — full viewport, robot centered as background */}
+      <div className="relative w-full h-screen">
+
+        {/* Canvas fills entire hero — clipPath crops legs at bottom */}
+        <div
+          className="absolute inset-0 z-0"
+          style={{ background: 'transparent', clipPath: 'inset(0 0 12% 0)' }}
+        >
+          <SceneNoSSR />
+        </div>
+
+        {/* Radial dark overlay — bright at center, dark at edges for text readability */}
+        <div
+          className="absolute inset-0 z-5 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse at center, transparent 30%, rgba(10,10,15,0.75) 100%)",
+          }}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+
+        {/* Text overlaid on canvas */}
+        {/* <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
+          <div className="pointer-events-auto">
+            <p className="text-amber-400 font-mono text-sm tracking-widest mb-4 uppercase">
+              Runtime Security for AI Agents
+            </p>
+            <h1 className="text-5xl md:text-7xl font-bold text-white leading-tight mb-6">
+              Your AI agents are<br />running unsupervised.
+            </h1>
+            <p className="text-white/60 text-xl mb-8 max-w-lg mx-auto">
+              Some are already compromised.
+            </p>
+            <div className="flex gap-4 justify-center flex-wrap">
+              <button className="bg-[#4a3fad] hover:bg-[#5a4fbd] text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all shadow-[0_0_30px_rgba(74,63,173,0.5)]">
+                Request a Demo
+              </button>
+              <button className="border border-white/20 hover:border-white/40 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all">
+                See How It Works
+              </button>
+            </div>
+          </div>
+        </div> */}
+
+        {/* Bottom gradient — blends hero into sections below */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-[#0a0a0f] to-transparent z-10" />
+      </div>
+
+      {/* SECTIONS BELOW — full width stacked on dark background */}
+      <div className="relative z-20 bg-[#0a0a0f]">
+        <Section2 />
+        <Section3 />
+        <Section4 />
+        <FeatureCards />
+        <Pricing />
+        <CTA />
+      </div>
+    </main>
   );
 }
