@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Orbitron, Geist_Mono } from "next/font/google";
+import { Orbitron, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 const orbitron = Orbitron({
@@ -8,15 +8,16 @@ const orbitron = Orbitron({
   weight: ["400", "500", "600", "700", "800", "900"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
 });
 
 export const metadata: Metadata = {
-  title: "AgentPatrol — Runtime Security for AI Agents",
+  title: "AgentPatrol — Autonomous Agent Security",
   description:
-    "Kernel-level enforcement for LangGraph, CrewAI, and any Python AI agent. Zero code changes. 90-second deploy.",
+    "AgentPatrol deploys autonomous security agents across your stack — monitoring traffic, detecting anomalies, and neutralizing threats in real time.",
 };
 
 export default function RootLayout({
@@ -27,7 +28,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${orbitron.variable} ${geistMono.variable} h-full`}
+      className={`${orbitron.variable} ${jetbrainsMono.variable} h-full`}
     >
       <body className="min-h-full antialiased">{children}</body>
     </html>

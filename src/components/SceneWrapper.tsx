@@ -2,7 +2,7 @@
 import dynamic from 'next/dynamic'
 
 const SceneNoSSR = dynamic(
-  () => import('./Scene').then((m) => ({ default: m.Scene })),
+  () => import('./SceneWithTracker').then((m) => ({ default: m.SceneWithTracker })),
   { ssr: false, loading: () => null }
 )
 

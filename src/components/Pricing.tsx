@@ -1,91 +1,232 @@
 'use client'
 
+const monoFont = 'var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace, monospace'
+const orbFont = 'var(--font-orbitron), "Orbitron", sans-serif'
+
 const plans = [
   {
-    name: 'Starter',
-    price: '$499',
-    period: '/month',
-    agents: 'Up to 5 agents',
-    features: ['Kernel-level monitoring', 'Real-time blocking', 'Session reports', 'Email support'],
-    highlight: false,
-    cta: 'Get Started',
+    tier: 'Tier 01',
+    name: 'Recon',
+    price: '$0',
+    period: '/forever',
+    featured: false,
+    badge: null,
+    features: [
+      '1 active agent',
+      '10K events / month',
+      '7-day log retention',
+      'Community channel',
+    ],
+    cta: 'Start free',
+    ctaClass: 'btn-ghost',
   },
   {
-    name: 'Growth',
-    price: '$1,999',
-    period: '/month',
-    agents: 'Up to 25 agents',
-    features: ['Everything in Starter', 'AI detection engine', 'OWASP ASI mapping', 'Slack alerts', 'Priority support'],
-    highlight: true,
-    cta: 'Most Popular',
+    tier: 'Tier 02',
+    name: 'Patrol',
+    price: '$79',
+    period: '/agent / mo',
+    featured: true,
+    badge: 'RECOMMENDED',
+    features: [
+      'Unlimited events',
+      '90-day replay buffer',
+      'Custom playbooks',
+      'SOC 2 Type II evidence',
+      '24/7 paging',
+    ],
+    cta: 'Deploy patrol',
+    ctaClass: 'btn-primary',
+    ctaArr: true,
   },
   {
-    name: 'Enterprise',
+    tier: 'Tier 03',
+    name: 'Garrison',
     price: 'Custom',
     period: '',
-    agents: 'Unlimited agents',
-    features: ['Everything in Growth', 'Custom policy rules', 'SOC2 audit package', 'SLA + on-call', 'Dedicated CSM'],
-    highlight: false,
-    cta: 'Contact Sales',
+    featured: false,
+    badge: null,
+    features: [
+      'Air-gapped deploy',
+      'On-prem control plane',
+      'Dedicated SRE liaison',
+      'Federal & HIPAA add-ons',
+      'FedRAMP roadmap',
+    ],
+    cta: 'Contact ops',
+    ctaClass: 'btn-ghost',
   },
 ]
 
 export function Pricing() {
   return (
-    <section id="pricing" className="py-24 px-6 lg:px-16">
-      <div className="max-w-5xl mx-auto">
-        <div className="text-center mb-14">
-          <span className="text-[#EF9F27] font-mono text-xs tracking-[0.2em] uppercase">Pricing</span>
-          <h2 className="text-3xl lg:text-4xl font-bold text-white mt-3">
-            Transparent pricing. No surprises.
-          </h2>
+    <section id="pricing" style={{ padding: '120px 0', position: 'relative', zIndex: 5 }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 32px' }}>
+        {/* Section header */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'flex-end',
+            justifyContent: 'space-between',
+            marginBottom: 48,
+            gap: 32,
+            flexWrap: 'wrap',
+          }}
+        >
+          <div>
+            <div className="sec-eyebrow">// DEPLOYMENT TIERS</div>
+            <h2
+              className="sec-title-lg"
+              style={{
+                fontFamily: orbFont,
+                fontWeight: 800,
+                fontSize: 56,
+                letterSpacing: '.02em',
+                margin: '8px 0 0',
+                lineHeight: 1,
+                color: 'var(--ink)',
+              }}
+            >
+              Pick a patrol size.
+            </h2>
+          </div>
+          <p
+            style={{
+              fontFamily: monoFont,
+              color: 'var(--ink-dim)',
+              maxWidth: 480,
+              fontSize: 14,
+              lineHeight: 1.7,
+            }}
+          >
+            Start with one agent, scale to a global swarm. Every tier ships with the full detection engine — only the volume changes.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Pricing grid */}
+        <div
+          className="price-grid-3"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: 1,
+            background: 'var(--line)',
+            border: '1px solid var(--line)',
+          }}
+        >
           {plans.map((plan) => (
             <div
               key={plan.name}
-              className="relative p-8 rounded-2xl flex flex-col"
               style={{
-                background: plan.highlight ? 'rgba(74,63,173,0.15)' : 'rgba(255,255,255,0.03)',
-                border: plan.highlight ? '1px solid rgba(74,63,173,0.6)' : '1px solid rgba(255,255,255,0.08)',
-                boxShadow: plan.highlight ? '0 0 40px rgba(74,63,173,0.3)' : 'none',
+                background: plan.featured ? '#0e0e12' : 'var(--bg-2)',
+                padding: '40px 32px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 20,
+                position: 'relative',
+                borderTop: plan.featured ? '2px solid var(--amber)' : undefined,
               }}
             >
-              {plan.highlight && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="px-3 py-1 bg-[#4a3fad] text-white text-xs font-semibold rounded-full">
-                    Most Popular
-                  </span>
+              {plan.badge && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    right: 24,
+                    transform: 'translateY(-50%)',
+                    background: 'var(--amber)',
+                    color: '#111',
+                    fontFamily: orbFont,
+                    fontWeight: 700,
+                    fontSize: 10,
+                    letterSpacing: '.2em',
+                    padding: '6px 10px',
+                  }}
+                >
+                  {plan.badge}
                 </div>
               )}
 
-              <div className="mb-6">
-                <div className="text-white/60 text-sm font-medium mb-1">{plan.name}</div>
-                <div className="flex items-end gap-1">
-                  <span className="text-4xl font-bold text-white">{plan.price}</span>
-                  {plan.period && <span className="text-white/40 mb-1">{plan.period}</span>}
-                </div>
-                <div className="text-[#EF9F27] text-sm mt-1">{plan.agents}</div>
+              <div
+                style={{
+                  fontFamily: monoFont,
+                  fontSize: 11,
+                  color: 'var(--amber)',
+                  letterSpacing: '.3em',
+                  textTransform: 'uppercase',
+                }}
+              >
+                {plan.tier}
               </div>
 
-              <ul className="flex flex-col gap-2.5 mb-8 flex-1">
+              <h3
+                style={{
+                  fontFamily: orbFont,
+                  fontWeight: 800,
+                  fontSize: 28,
+                  margin: 0,
+                  letterSpacing: '.04em',
+                  color: 'var(--ink)',
+                }}
+              >
+                {plan.name}
+              </h3>
+
+              <div
+                style={{
+                  fontFamily: orbFont,
+                  fontWeight: 800,
+                  fontSize: 56,
+                  lineHeight: 1,
+                  letterSpacing: '.02em',
+                  color: '#fff',
+                }}
+              >
+                {plan.price}
+                {plan.period && (
+                  <small
+                    style={{
+                      fontFamily: monoFont,
+                      fontSize: 13,
+                      fontWeight: 400,
+                      color: 'var(--ink-dim)',
+                      letterSpacing: '.04em',
+                      marginLeft: 6,
+                    }}
+                  >
+                    {plan.period}
+                  </small>
+                )}
+              </div>
+
+              <ul
+                style={{
+                  listStyle: 'none',
+                  padding: 0,
+                  margin: 0,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 10,
+                  fontFamily: monoFont,
+                  fontSize: 13,
+                  color: 'var(--ink-dim)',
+                  flex: 1,
+                }}
+              >
                 {plan.features.map((f) => (
-                  <li key={f} className="flex items-center gap-2.5 text-white/70 text-sm">
-                    <svg className="w-4 h-4 text-[#EF9F27] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                    </svg>
-                    {f}
-                  </li>
+                  <li key={f} className="plan-list-item">{f}</li>
                 ))}
               </ul>
 
-              <button
-                className="w-full py-3 rounded-lg font-medium transition-all text-sm text-white"
-                style={{ background: plan.highlight ? '#4a3fad' : 'rgba(255,255,255,0.07)' }}
+              <a
+                href="#"
+                className={`btn ${plan.ctaClass}`}
+                style={{ justifyContent: 'center' }}
               >
                 {plan.cta}
-              </button>
+                {plan.ctaArr && (
+                  <span style={{ fontFamily: monoFont, fontWeight: 400 }}>→</span>
+                )}
+              </a>
             </div>
           ))}
         </div>

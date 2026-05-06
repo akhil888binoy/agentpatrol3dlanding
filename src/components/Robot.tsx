@@ -220,7 +220,7 @@ export function Robot() {
     })
   }, [scene])
 
-  useFrame((state) => {
+  useFrame(() => {
     if (!groupRef.current) return
 
     if (isTouchDevice) {
@@ -240,7 +240,7 @@ export function Robot() {
           (-pointer.y * 0.3 - headBoneRef.current.rotation.x) * 0.08
       }
     }
-    groupRef.current.position.y = -0.35 + Math.sin(state.clock.elapsedTime * 0.8) * 0.06
+    groupRef.current.position.y = -0.35
   })
 
   return (
