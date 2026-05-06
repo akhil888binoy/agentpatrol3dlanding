@@ -114,6 +114,8 @@ body {
   letter-spacing: 0.3em;
   text-transform: uppercase;
   margin-bottom: 32px;
+  animation: fadeInUp 0.6s 0.05s ease both;
+  text-shadow: 0 0 12px rgba(255,176,32,0.4);
 }
 .hero-tag::before,
 .hero-tag::after {
@@ -134,6 +136,7 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
+  text-shadow: 0 0 14px rgba(255,176,32,0.35);
 }
 .sec-eyebrow::before {
   content: "";
@@ -231,6 +234,7 @@ body {
 }
 .feat-card:hover {
   background: #101015;
+  box-shadow: 0 0 0 1px rgba(255,176,32,0.2), 0 0 40px rgba(255,176,32,0.07);
 }
 
 /* ---------- Console list ---------- */
@@ -320,6 +324,101 @@ body {
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: rgba(255, 176, 32, 0.25); border-radius: 3px; }
+
+/* ---------- Entrance & glow keyframes ---------- */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmerHero {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+@keyframes amberCardGlow {
+  0%, 100% { box-shadow: 0 0 0 rgba(255,176,32,0); }
+  50%       { box-shadow: 0 0 36px rgba(255,176,32,0.18), 0 0 10px rgba(255,176,32,0.1); }
+}
+
+@keyframes glowRed {
+  0%, 100% { text-shadow: 0 0 6px rgba(255,59,59,0.45); }
+  50%       { text-shadow: 0 0 22px rgba(255,59,59,1), 0 0 44px rgba(255,59,59,0.5); }
+}
+
+@keyframes patrolGlow {
+  0%, 100% { filter: drop-shadow(0 0 16px rgba(255,176,32,0.3)); }
+  50%       { filter: drop-shadow(0 0 40px rgba(255,176,32,0.7)) drop-shadow(0 0 80px rgba(255,176,32,0.2)); }
+}
+
+/* ---------- Hero entrance ---------- */
+.hero-h1-anim       { animation: fadeInUp 0.7s  0.2s  ease both; }
+.hero-subtitle-anim { animation: fadeInUp 0.65s 0.4s  ease both; }
+.hero-art-anim      { animation: fadeInUp 0.75s 0.55s ease both; }
+.hero-cta-anim      { animation: fadeInUp 0.65s 0.72s ease both; }
+.hero-stats-anim    { animation: fadeInUp 0.65s 0.9s  ease both; }
+
+/* "SLEEP. PATROL." shimmer span */
+.patrol-shimmer {
+  display: block;
+  background: linear-gradient(90deg, #b87a10 0%, var(--amber) 25%, var(--amber-2) 44%, #fff9e0 50%, var(--amber-2) 56%, var(--amber) 75%, #b87a10 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmerHero 5s linear infinite, patrolGlow 3s ease-in-out infinite;
+}
+
+/* HUD label glow */
+.hud-glow {
+  text-shadow: 0 0 10px rgba(255,176,32,0.55), 0 0 26px rgba(255,176,32,0.2);
+}
+
+/* Feature card icon box */
+.feat-icon {
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.feat-card:hover .feat-icon {
+  border-color: rgba(255,176,32,0.5) !important;
+  box-shadow: 0 0 22px rgba(255,176,32,0.3);
+}
+.feat-card:hover h3 {
+  text-shadow: 0 0 24px rgba(255,255,255,0.12);
+}
+
+/* Featured pricing card glow */
+.featured-glow {
+  animation: amberCardGlow 3s ease-in-out infinite;
+}
+
+/* Console ALERT level pulse */
+.log-alert-pulse {
+  animation: glowRed 1.5s ease-in-out infinite;
+}
+
+/* CTA gradient text shimmer */
+.cta-patrol-shimmer {
+  background: linear-gradient(90deg, #b87a10 0%, var(--amber) 25%, var(--amber-2) 44%, #fff9e0 50%, var(--amber-2) 56%, var(--amber) 75%, #b87a10 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmerHero 4s linear infinite;
+}
+
+/* Brand "Patrol" hover glow */
+.brand-patrol {
+  color: var(--amber);
+  transition: text-shadow 0.3s ease;
+}
+.brand-patrol:hover {
+  text-shadow: 0 0 12px rgba(255,176,32,0.7), 0 0 28px rgba(255,176,32,0.3);
+}
+
+/* Navbar deploy button enhanced glow */
+.nav-deploy-glow {
+  animation: amberCardGlow 3s ease-in-out infinite;
+}
 
 /* ---------- Agent detection ring ---------- */
 @keyframes agentRingPulse {

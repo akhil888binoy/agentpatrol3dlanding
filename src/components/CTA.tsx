@@ -31,14 +31,7 @@ export function CTA() {
             }}
           >
             STAND UP YOUR<br />
-            <span
-              style={{
-                background: 'linear-gradient(180deg, var(--amber-2), var(--amber))',
-                WebkitBackgroundClip: 'text',
-                backgroundClip: 'text',
-                color: 'transparent',
-              }}
-            >
+            <span className="cta-patrol-shimmer">
               FIRST PATROL
             </span>
           </h2>

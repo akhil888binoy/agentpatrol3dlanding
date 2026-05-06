@@ -116,6 +116,7 @@ export function Pricing() {
           {plans.map((plan) => (
             <div
               key={plan.name}
+              className={plan.featured ? 'featured-glow' : ''}
               style={{
                 background: plan.featured ? '#0e0e12' : 'var(--bg-2)',
                 padding: '40px 32px',
@@ -140,6 +141,7 @@ export function Pricing() {
                     fontSize: 10,
                     letterSpacing: '.2em',
                     padding: '6px 10px',
+                    boxShadow: '0 0 20px rgba(255,176,32,0.6), 0 0 40px rgba(255,176,32,0.25)',
                   }}
                 >
                   {plan.badge}
@@ -179,6 +181,7 @@ export function Pricing() {
                   lineHeight: 1,
                   letterSpacing: '.02em',
                   color: '#fff',
+                  textShadow: plan.featured ? '0 0 24px rgba(255,176,32,0.35)' : 'none',
                 }}
               >
                 {plan.price}

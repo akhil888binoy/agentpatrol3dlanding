@@ -1,3 +1,6 @@
+'use client'
+import { useEffect, useRef, useState } from 'react'
+
 const features = [
   {
     id: 'F.01',
@@ -74,8 +77,22 @@ const features = [
 ]
 
 export function Features() {
+  const ref = useRef<HTMLElement>(null)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect() } },
+      { threshold: 0.05 }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+
   return (
-    <section id="features" style={{ padding: '140px 0 80px', position: 'relative', zIndex: 5 }}>
+    <section ref={ref} id="features" style={{ padding: '140px 0 80px', position: 'relative', zIndex: 5 }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 32px' }}>
         {/* Section header */}
         <div
@@ -86,6 +103,9 @@ export function Features() {
             marginBottom: 48,
             gap: 32,
             flexWrap: 'wrap',
+            opacity: visible ? 1 : 0,
+            transform: visible ? 'none' : 'translateY(20px)',
+            transition: visible ? 'opacity 0.6s ease, transform 0.6s ease' : 'none',
           }}
         >
           <div>
@@ -129,8 +149,18 @@ export function Features() {
             border: '1px solid var(--line)',
           }}
         >
-          {features.map((f) => (
-            <div key={f.id} className="feat-card">
+          {features.map((f, i) => (
+            <div
+              key={f.id}
+              className="feat-card"
+              style={{
+                opacity: visible ? 1 : 0,
+                transform: visible ? 'translateY(0)' : 'translateY(18px)',
+                transition: visible
+                  ? `opacity 0.55s ${80 + i * 75}ms ease, transform 0.55s ${80 + i * 75}ms ease`
+                  : 'none',
+              }}
+            >
               <span
                 style={{
                   position: 'absolute',
@@ -145,6 +175,7 @@ export function Features() {
                 {f.id}
               </span>
               <div
+                className="feat-icon"
                 style={{
                   width: 48,
                   height: 48,
@@ -162,6 +193,7 @@ export function Features() {
                   fontSize: 11,
                   color: 'var(--amber)',
                   letterSpacing: '.2em',
+                  textShadow: '0 0 8px rgba(255,176,32,0.4)',
                 }}
               >
                 {f.num}
@@ -175,6 +207,7 @@ export function Features() {
                   margin: 0,
                   lineHeight: 1.2,
                   color: 'var(--ink)',
+                  transition: 'text-shadow 0.3s ease',
                 }}
               >
                 {f.title}

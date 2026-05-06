@@ -1,4 +1,5 @@
-import { Fragment } from 'react'
+'use client'
+import { Fragment, useEffect, useRef, useState } from 'react'
 
 type LogEntry = {
   time: string
@@ -18,12 +19,34 @@ const logEntries: LogEntry[] = [
   { time: '17:42:18', lvl: 'OK',    lvlColor: 'var(--green)', msg: <>Resume patrol · all clear</> },
 ]
 
+const lvlShadow: Record<string, string> = {
+  OK:    '0 0 8px rgba(57,217,138,0.75)',
+  ALERT: '0 0 10px rgba(255,59,59,0.9)',
+  ACT:   '0 0 8px rgba(255,176,32,0.65)',
+  SCAN:  '0 0 8px rgba(255,176,32,0.55)',
+  SYNC:  '0 0 8px rgba(255,176,32,0.55)',
+}
+
 const monoFont = 'var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace, monospace'
 const orbFont = 'var(--font-orbitron), "Orbitron", sans-serif'
 
 export function Console() {
+  const ref = useRef<HTMLElement>(null)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect() } },
+      { threshold: 0.1 }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+
   return (
-    <section style={{ padding: '80px 0', position: 'relative', zIndex: 5 }}>
+    <section ref={ref} style={{ padding: '80px 0', position: 'relative', zIndex: 5 }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 32px' }}>
         <div
           className="console-grid"
@@ -34,6 +57,9 @@ export function Console() {
             gridTemplateColumns: '1.1fr 1fr',
             gap: 0,
             overflow: 'hidden',
+            opacity: visible ? 1 : 0,
+            transform: visible ? 'none' : 'translateY(24px)',
+            transition: visible ? 'opacity 0.65s ease, transform 0.65s ease' : 'none',
           }}
         >
           {/* Left panel */}
@@ -126,9 +152,32 @@ export function Console() {
             >
               {logEntries.map((entry, i) => (
                 <Fragment key={i}>
-                  <span style={{ color: 'var(--ink-mute)' }}>{entry.time}</span>
-                  <span style={{ color: entry.lvlColor }}>{entry.lvl}</span>
-                  <span style={{ color: '#d6d6dc' }}>{entry.msg}</span>
+                  <span style={{
+                    color: 'var(--ink-mute)',
+                    opacity: visible ? 1 : 0,
+                    transform: visible ? 'none' : 'translateY(6px)',
+                    transition: visible ? `opacity 0.4s ${120 + i * 85}ms ease, transform 0.4s ${120 + i * 85}ms ease` : 'none',
+                  }}>
+                    {entry.time}
+                  </span>
+                  <span
+                    className={entry.lvl === 'ALERT' ? 'log-alert-pulse' : ''}
+                    style={{
+                      color: entry.lvlColor,
+                      textShadow: lvlShadow[entry.lvl] ?? 'none',
+                      opacity: visible ? 1 : 0,
+                      transition: visible ? `opacity 0.4s ${120 + i * 85}ms ease` : 'none',
+                    }}
+                  >
+                    {entry.lvl}
+                  </span>
+                  <span style={{
+                    color: '#d6d6dc',
+                    opacity: visible ? 1 : 0,
+                    transition: visible ? `opacity 0.4s ${120 + i * 85}ms ease` : 'none',
+                  }}>
+                    {entry.msg}
+                  </span>
                 </Fragment>
               ))}
             </div>

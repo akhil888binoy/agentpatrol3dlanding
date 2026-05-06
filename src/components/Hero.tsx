@@ -32,6 +32,7 @@ export function Hero() {
 
         {/* Title */}
         <h1
+          className="hero-h1-anim"
           style={{
             textAlign: 'center',
             fontWeight: 800,
@@ -46,22 +47,14 @@ export function Hero() {
           }}
         >
           AGENTS DON&apos;T<br />
-          <span
-            style={{
-              display: 'block',
-              background: 'linear-gradient(180deg, var(--amber-2), var(--amber) 60%, #b87a10)',
-              WebkitBackgroundClip: 'text',
-              backgroundClip: 'text',
-              color: 'transparent',
-              filter: 'drop-shadow(0 0 24px rgba(255,176,32,.25))',
-            }}
-          >
+          <span className="patrol-shimmer">
             SLEEP. PATROL.
           </span>
         </h1>
 
         {/* Subtitle */}
         <p
+          className="hero-subtitle-anim"
           style={{
             textAlign: 'center',
             maxWidth: 760,
@@ -80,6 +73,7 @@ export function Hero() {
         {/* Hero art — Scene replaces the robot image */}
         <div
           id="hero-robot-art"
+          className="hero-art-anim"
           style={{
             position: 'relative',
             margin: '48px auto 0',
@@ -95,6 +89,7 @@ export function Hero() {
 
           {/* HUD labels */}
           <span
+            className="hud-glow"
             style={{
               position: 'absolute',
               fontFamily: 'var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace, monospace',
@@ -110,6 +105,7 @@ export function Hero() {
             UNIT-04 // POLICE PATROL
           </span>
           <span
+            className="hud-glow"
             style={{
               position: 'absolute',
               fontFamily: 'var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace, monospace',
@@ -127,6 +123,7 @@ export function Hero() {
             TARGET LOCK
           </span>
           <span
+            className="hud-glow"
             style={{
               position: 'absolute',
               fontFamily: 'var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace, monospace',
@@ -231,6 +228,7 @@ export function Hero() {
 
         {/* CTA buttons */}
         <div
+          className="hero-cta-anim"
           style={{
             display: 'flex',
             justifyContent: 'center',
@@ -251,6 +249,7 @@ export function Hero() {
 
         {/* Meta stats */}
         <div
+          className="hero-stats-anim"
           style={{
             display: 'flex',
             justifyContent: 'center',

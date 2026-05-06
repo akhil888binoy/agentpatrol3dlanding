@@ -23,7 +23,6 @@ export default function Home() {
 
       {/* Fixed header chrome */}
       <Navbar />
-      <StatusStrip />
 
       {/* Page content */}
       <main>
