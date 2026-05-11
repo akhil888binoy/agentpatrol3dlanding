@@ -8,9 +8,10 @@ export function EvilCursor() {
   const raf           = useRef<number | null>(null)
   const neutralizedAt  = useRef(-9999)
   const isNeutralized  = useRef(false)
+  const inHero        = useRef(false)
 
   useEffect(() => {
-    const onMove        = (e: MouseEvent) => { pos.current = { x: e.clientX, y: e.clientY } }
+    const onMove = (e: MouseEvent) => { pos.current = { x: e.clientX, y: e.clientY } }
     const onNeutralized = () => { neutralizedAt.current = performance.now(); isNeutralized.current = true }
     window.addEventListener('mousemove', onMove)
     window.addEventListener('agentNeutralized', onNeutralized)
@@ -29,7 +30,19 @@ export function EvilCursor() {
         shakeY = Math.cos(ne * 0.06) * 6 * decay
       }
 
+      const hero = document.getElementById('top')
+      if (hero) {
+        const r = hero.getBoundingClientRect()
+        inHero.current = p.x >= r.left && p.x <= r.right && p.y >= r.top && p.y <= r.bottom
+      }
+
       if (iconRef.current) {
+        if (!inHero.current) {
+          iconRef.current.style.display = 'none'
+          raf.current = requestAnimationFrame(tick)
+          return
+        }
+        iconRef.current.style.display = 'block'
         iconRef.current.style.transform = `translate(${p.x - 20 + shakeX}px, ${p.y - 15 + shakeY}px)`
         if (alive) {
           // shake phase: flicker opacity and hue

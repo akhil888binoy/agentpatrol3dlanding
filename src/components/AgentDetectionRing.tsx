@@ -168,7 +168,7 @@ export function AgentDetectionRing() {
         <span
           ref={titleRef}
           style={{
-            fontFamily:    'var(--font-orbitron), Orbitron, sans-serif',
+            fontFamily:    'var(--font-space-grotesk), "Space Grotesk", sans-serif',
             fontSize:      11,
             fontWeight:    700,
             letterSpacing: '0.22em',
@@ -182,7 +182,7 @@ export function AgentDetectionRing() {
         <span
           ref={subRef}
           style={{
-            fontFamily:    'var(--font-orbitron), Orbitron, sans-serif',
+            fontFamily:    'var(--font-space-grotesk), "Space Grotesk", sans-serif',
             fontSize:      8,
             fontWeight:    600,
             letterSpacing: '0.15em',

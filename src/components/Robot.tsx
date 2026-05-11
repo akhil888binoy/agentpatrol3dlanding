@@ -1,10 +1,10 @@
 'use client'
 import { useRef, useEffect } from 'react'
-import { useGLTF } from '@react-three/drei'
+import { useGLTF, useAnimations } from '@react-three/drei'
 import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 
-const ROBOT_PATH = '/robot/robotagent.glb'
+const ROBOT_PATH = '/robot/flyingrobot.glb'
 
 const isTouchDevice =
   typeof window !== 'undefined' &&
@@ -13,8 +13,13 @@ const isTouchDevice =
 export function Robot() {
   const groupRef = useRef<THREE.Group>(null)
   const headBoneRef = useRef<THREE.Object3D | null>(null)
-  const { scene } = useGLTF(ROBOT_PATH)
+  const { scene, animations } = useGLTF(ROBOT_PATH)
+  const { actions } = useAnimations(animations, groupRef)
   const { pointer } = useThree()
+
+  useEffect(() => {
+    Object.values(actions).forEach(action => action?.play())
+  }, [actions])
 
   useEffect(() => {
     // ── STEP 1: log every mesh name + current material colours ──────────────
@@ -135,7 +140,7 @@ export function Robot() {
         return
       }
 
-      // FIX 4 — Eyes / visor → glowing amber emissive
+      // FIX 4 — Eyes / visor → glowing blue emissive
       if (
         n.includes('eye')         || n.includes('lens') ||
         n.includes('visor')       || n.includes('screen') ||
@@ -146,9 +151,9 @@ export function Robot() {
         n.includes('retina')      || n.includes('pupil')
       ) {
         child.material = new THREE.MeshStandardMaterial({
-          color: new THREE.Color('#FF6B00'),
-          emissive: new THREE.Color('#FF4500'),
-          emissiveIntensity: 2.0,
+          color: new THREE.Color('#00AAFF'),
+          emissive: new THREE.Color('#0088FF'),
+          emissiveIntensity: 2.5,
           metalness: 0.0,
           roughness: 0.0,
           toneMapped: false,

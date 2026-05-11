@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Orbitron, JetBrains_Mono } from "next/font/google";
+import { Space_Grotesk, JetBrains_Mono, Inter_Tight } from "next/font/google";
 import "./globals.css";
 
-const orbitron = Orbitron({
-  variable: "--font-orbitron",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -14,21 +14,25 @@ const jetbrainsMono = JetBrains_Mono({
   weight: ["400", "500", "600"],
 });
 
+const interTight = Inter_Tight({
+  variable: "--font-inter-tight",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+});
+
 export const metadata: Metadata = {
-  title: "AgentPatrol — Autonomous Agent Security",
+  title: "AgentPatrol — When AI goes rogue, AI shuts it down.",
   description:
-    "AgentPatrol deploys autonomous security agents across your stack — monitoring traffic, detecting anomalies, and neutralizing threats in real time.",
+    "An on-device intelligence layer for autonomous agent infrastructure. AgentPatrol watches every agent on your system — credential theft, prompt injection, lateral movement — and severs the threat in under ten milliseconds.",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
       lang="en"
-      className={`${orbitron.variable} ${jetbrainsMono.variable} h-full`}
+      className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} ${interTight.variable} h-full`}
     >
       <body className="min-h-full antialiased">{children}</body>
     </html>

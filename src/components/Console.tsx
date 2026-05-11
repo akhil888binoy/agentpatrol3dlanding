@@ -1,185 +1,159 @@
 'use client'
-import { Fragment, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
-type LogEntry = {
-  time: string
-  lvl: string
-  lvlColor: string
-  msg: React.ReactNode
-}
-
-const logEntries: LogEntry[] = [
-  { time: '17:42:01', lvl: 'OK',    lvlColor: 'var(--green)', msg: <>Sweep complete · <b style={{ color: '#fff', fontWeight: 600 }}>2,481</b> endpoints clean</> },
-  { time: '17:42:04', lvl: 'SCAN',  lvlColor: 'var(--amber)', msg: <>Baseline drift on <b style={{ color: '#fff', fontWeight: 600 }}>api-eu-3</b> · σ=0.31</> },
-  { time: '17:42:06', lvl: 'OK',    lvlColor: 'var(--green)', msg: <>Drift within tolerance · resuming</> },
-  { time: '17:42:09', lvl: 'ALERT', lvlColor: 'var(--red)',   msg: <>Credential reuse from <b style={{ color: '#fff', fontWeight: 600 }}>185.220.x.x</b> · TOR exit</> },
-  { time: '17:42:09', lvl: 'ACT',   lvlColor: 'var(--amber)', msg: <>Session revoked · keys rotated · token blacklisted</> },
-  { time: '17:42:10', lvl: 'OK',    lvlColor: 'var(--green)', msg: <>Threat neutralized in <b style={{ color: '#fff', fontWeight: 600 }}>12ms</b> · paged on-call</> },
-  { time: '17:42:14', lvl: 'SYNC',  lvlColor: 'var(--amber)', msg: <>Signal pushed to swarm · <b style={{ color: '#fff', fontWeight: 600 }}>14 nodes</b> hardened</> },
-  { time: '17:42:18', lvl: 'OK',    lvlColor: 'var(--green)', msg: <>Resume patrol · all clear</> },
+const EVENTS = [
+  { cls: 'ok',   t: '17:42:01', m: '>', msg: 'Sweep complete · <code>2,481</code> endpoints clean' },
+  { cls: 'warn', t: '17:42:04', m: '~', msg: 'Baseline drift · <code>api-eu-3</code> · σ=0.31' },
+  { cls: 'ok',   t: '17:42:06', m: '>', msg: 'Drift within tolerance · resuming' },
+  { cls: 'crit', t: '17:42:09', m: '!', msg: 'Credential reuse · <code>185.220.x.x</code> · TOR exit' },
+  { cls: 'warn', t: '17:42:09', m: '~', msg: 'Session revoked · keys rotated · token blacklisted <span class="tag">ACT</span>' },
+  { cls: 'ok',   t: '17:42:10', m: '>', msg: 'Threat neutralized in <code>12ms</code> · paged on-call' },
+  { cls: 'warn', t: '17:42:14', m: '~', msg: 'Signal pushed to swarm · <code>14 nodes</code> hardened <span class="tag">SYNC</span>' },
+  { cls: 'ok',   t: '17:42:18', m: '>', msg: 'Resume patrol · all clear' },
+  { cls: 'crit', t: '17:42:31', m: '!', msg: 'Prompt injection · agent-gpt-a7b · <code>QUARANTINED</code>' },
+  { cls: 'ok',   t: '17:42:31', m: '>', msg: 'Playbook executed in <code>7ms</code> · incident filed' },
 ]
 
-const lvlShadow: Record<string, string> = {
-  OK:    '0 0 8px rgba(57,217,138,0.75)',
-  ALERT: '0 0 10px rgba(255,59,59,0.9)',
-  ACT:   '0 0 8px rgba(255,176,32,0.65)',
-  SCAN:  '0 0 8px rgba(255,176,32,0.55)',
-  SYNC:  '0 0 8px rgba(255,176,32,0.55)',
-}
-
-const monoFont = 'var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace, monospace'
-const orbFont = 'var(--font-orbitron), "Orbitron", sans-serif'
+const BAR_HEIGHTS = [18, 28, 22, 36, 30, 24, 32, 20, 34, 26, 18, 30]
 
 export function Console() {
-  const ref = useRef<HTMLElement>(null)
-  const [visible, setVisible] = useState(false)
+  const [count, setCount] = useState(0)
+  const [lat, setLat]     = useState('8.3')
+  const keyRef = useRef(0)
 
   useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect() } },
-      { threshold: 0.1 }
-    )
-    obs.observe(el)
-    return () => obs.disconnect()
+    const id = setInterval(() => {
+      setCount(n => {
+        if (n >= EVENTS.length) {
+          keyRef.current += 1
+          return 0
+        }
+        return n + 1
+      })
+    }, 1400)
+    return () => clearInterval(id)
   }, [])
 
-  return (
-    <section ref={ref} style={{ padding: '80px 0', position: 'relative', zIndex: 5 }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 32px' }}>
-        <div
-          className="console-grid"
-          style={{
-            border: '1px solid var(--line-2)',
-            background: '#0a0a0d',
-            display: 'grid',
-            gridTemplateColumns: '1.1fr 1fr',
-            gap: 0,
-            overflow: 'hidden',
-            opacity: visible ? 1 : 0,
-            transform: visible ? 'none' : 'translateY(24px)',
-            transition: visible ? 'opacity 0.65s ease, transform 0.65s ease' : 'none',
-          }}
-        >
-          {/* Left panel */}
-          <div
-            className="console-border-right"
-            style={{ padding: 48, borderRight: '1px solid var(--line)' }}
-          >
-            <div className="sec-eyebrow">// LIVE OPS</div>
-            <h2
-              style={{
-                fontFamily: orbFont,
-                fontWeight: 800,
-                fontSize: 40,
-                letterSpacing: '.02em',
-                lineHeight: 1.1,
-                margin: '16px 0 16px',
-                color: 'var(--ink)',
-              }}
-            >
-              Watch the patrol<br />in real time.
-            </h2>
-            <p
-              style={{
-                fontFamily: monoFont,
-                color: 'var(--ink-dim)',
-                fontSize: 14,
-                lineHeight: 1.7,
-                margin: '0 0 24px',
-              }}
-            >
-              Every agent reports to a single command surface. Tail the live log, replay incidents frame-by-frame, or hand control off to your SOC team.
-            </p>
-            <ul
-              style={{
-                listStyle: 'none',
-                padding: 0,
-                margin: 0,
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 12,
-                fontFamily: monoFont,
-                fontSize: 13,
-                color: 'var(--ink)',
-              }}
-            >
-              <li className="console-list-item">Stream logs over gRPC, Kafka, or stdout</li>
-              <li className="console-list-item">Replay any incident with full state diffs</li>
-              <li className="console-list-item">Custom playbooks in TypeScript or YAML</li>
-              <li className="console-list-item">Native integrations: PagerDuty, Slack, Linear, Jira</li>
-            </ul>
-          </div>
+  useEffect(() => {
+    const id = setInterval(() => setLat((7.4 + Math.random() * 2.2).toFixed(1)), 900)
+    return () => clearInterval(id)
+  }, [])
 
-          {/* Right panel — log */}
-          <div
-            style={{
-              background: '#06060a',
-              padding: 24,
-              fontFamily: monoFont,
-              fontSize: 13,
-              lineHeight: 1.8,
-              backgroundImage: 'repeating-linear-gradient(0deg, rgba(255,255,255,.02) 0 1px, transparent 1px 3px)',
-            }}
-          >
-            {/* Console bar */}
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                color: 'var(--ink-mute)',
-                fontSize: 11,
-                letterSpacing: '.16em',
-                textTransform: 'uppercase',
-                borderBottom: '1px solid var(--line)',
-                paddingBottom: 12,
-                marginBottom: 16,
-              }}
-            >
-              <span>PATROL.LOG · NODE-04</span>
-              <span className="live-label">LIVE</span>
+  const visible = EVENTS.slice(0, count)
+
+  return (
+    <section id="detect" style={{ padding: '130px 0', position: 'relative', zIndex: 5 }}>
+      <div className="container">
+        <div className="section-head">
+          <div>
+            <div className="eyebrow"><span className="dot" />// Detection engine</div>
+            <h2 className="section-title" style={{ marginTop: 20 }}>
+              Watch the patrol<br />
+              in <span className="accent">real time</span>.
+            </h2>
+          </div>
+          <p className="lede">
+            Every agent reports to a single command surface. Tail the live log, replay incidents frame-by-frame, or hand control to your SOC team.
+          </p>
+        </div>
+
+        {/* Detect stage — console + signals */}
+        <div className="detect-stage glass" style={{ display: 'grid', gridTemplateColumns: '1.25fr 1fr', overflow: 'hidden' }}>
+          {/* Left: terminal */}
+          <div style={{ borderRight: '1px solid var(--line-2)' }}>
+            <div className="panel-head">
+              <div className="left">
+                <span className="dot" />
+                PATROL.LOG · NODE-04
+              </div>
+              <div className="right" style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--green)', fontSize: 10, letterSpacing: '0.16em' }}>
+                <span style={{ animation: 'blip 1.2s ease infinite' }}>●</span> LIVE
+              </div>
             </div>
 
-            {/* Log entries grid */}
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'auto auto 1fr',
-                gap: '8px 14px',
-                color: 'var(--ink-dim)',
-              }}
-            >
-              {logEntries.map((entry, i) => (
-                <Fragment key={i}>
-                  <span style={{
-                    color: 'var(--ink-mute)',
-                    opacity: visible ? 1 : 0,
-                    transform: visible ? 'none' : 'translateY(6px)',
-                    transition: visible ? `opacity 0.4s ${120 + i * 85}ms ease, transform 0.4s ${120 + i * 85}ms ease` : 'none',
-                  }}>
-                    {entry.time}
-                  </span>
-                  <span
-                    className={entry.lvl === 'ALERT' ? 'log-alert-pulse' : ''}
-                    style={{
-                      color: entry.lvlColor,
-                      textShadow: lvlShadow[entry.lvl] ?? 'none',
-                      opacity: visible ? 1 : 0,
-                      transition: visible ? `opacity 0.4s ${120 + i * 85}ms ease` : 'none',
-                    }}
-                  >
-                    {entry.lvl}
-                  </span>
-                  <span style={{
-                    color: '#d6d6dc',
-                    opacity: visible ? 1 : 0,
-                    transition: visible ? `opacity 0.4s ${120 + i * 85}ms ease` : 'none',
-                  }}>
-                    {entry.msg}
-                  </span>
-                </Fragment>
+            <div style={{ padding: '20px 24px', minHeight: 360, fontFamily: 'var(--font-jetbrains-mono), ui-monospace, monospace' }} key={keyRef.current}>
+              {visible.map((ev, i) => (
+                <div
+                  key={i}
+                  className={`console-line${ev.cls === 'crit' ? ' crit' : ev.cls === 'warn' ? ' warn' : ' ok'}`}
+                  style={{ animationDelay: `0ms` }}
+                >
+                  <span className="t">{ev.t}</span>
+                  <span className="m">{ev.m}</span>
+                  <span dangerouslySetInnerHTML={{ __html: ev.msg }} />
+                </div>
               ))}
+              {count > 0 && count <= EVENTS.length && (
+                <div className="console-line ok" style={{ animationDelay: '0ms' }}>
+                  <span className="t" />
+                  <span className="m" style={{ color: 'var(--ink-4)' }}>_</span>
+                  <span style={{ color: 'var(--ink-4)', animation: 'blip 1s step-start infinite' }}>▌</span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Right: signals */}
+          <div style={{ padding: '0' }}>
+            <div className="panel-head">
+              <div className="left">
+                <span className="dot amber" />
+                SIGNAL MONITOR
+              </div>
+              <div className="right">NODE-04 / EU-WEST</div>
+            </div>
+
+            <div style={{ padding: '28px 28px 24px', display: 'flex', flexDirection: 'column', gap: 28 }}>
+              {/* P50 Latency */}
+              <div>
+                <div style={{ fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 8 }}>
+                  P50 Detection Latency
+                </div>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
+                  <span style={{ fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', ui-monospace, monospace", fontSize: 36, fontWeight: 500, color: 'var(--green)', fontVariantNumeric: 'tabular-nums', textShadow: '0 0 20px rgba(94,179,255,0.4)' }}>
+                    {lat}
+                  </span>
+                  <span style={{ fontSize: 13, color: 'var(--ink-3)' }}>ms</span>
+                </div>
+                <div className="mini-bars">
+                  {BAR_HEIGHTS.map((h, i) => (
+                    <i key={i} style={{ height: h, animationDelay: `${i * 0.2}s` }} />
+                  ))}
+                </div>
+              </div>
+
+              {/* Signal count */}
+              <div style={{ paddingTop: 20, borderTop: '1px solid var(--line)' }}>
+                <div style={{ fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 10 }}>
+                  Behavioral signals active
+                </div>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
+                  <span style={{ fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', ui-monospace, monospace", fontSize: 36, fontWeight: 500, color: 'var(--ink)' }}>
+                    140
+                  </span>
+                  <span style={{ fontSize: 13, color: 'var(--green)' }}>+ signals</span>
+                </div>
+                <div style={{ marginTop: 12, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                  {['syscall', 'network', 'memory', 'process', 'file-io', 'auth'].map(tag => (
+                    <span key={tag} style={{ fontSize: 10, padding: '3px 8px', border: '1px solid var(--line-3)', color: 'var(--ink-3)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Egress */}
+              <div style={{ paddingTop: 20, borderTop: '1px solid var(--line)' }}>
+                <div style={{ fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 8 }}>
+                  Data egress
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <span style={{ fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', ui-monospace, monospace", fontSize: 28, fontWeight: 500, color: 'var(--green)', textShadow: '0 0 14px rgba(94,179,255,0.35)' }}>
+                    0
+                  </span>
+                  <span style={{ fontSize: 13, color: 'var(--ink-3)' }}>bytes / completely on-device</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

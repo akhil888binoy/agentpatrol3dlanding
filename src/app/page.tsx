@@ -1,35 +1,30 @@
 import { EvilCursor } from '@/components/EvilCursor'
 import { AgentDetectionRing } from '@/components/AgentDetectionRing'
 import { Navbar } from '@/components/Navbar'
-import { StatusStrip } from '@/components/StatusStrip'
 import { Hero } from '@/components/Hero'
+import { Problem } from '@/components/Problem'
+import { Solution } from '@/components/Solution'
+import { HowItWorks } from '@/components/HowItWorks'
 import { Features } from '@/components/Features'
-import { Console } from '@/components/Console'
-import { Pricing } from '@/components/Pricing'
+import { TechnicalDiff } from '@/components/TechnicalDiff'
+import { Demo } from '@/components/Demo'
 import { CTA } from '@/components/CTA'
 import { Footer } from '@/components/Footer'
 
 export default function Home() {
   return (
     <>
-      {/* Fixed background overlays */}
-      <div className="bg-fx" />
-      <div className="bg-scan" />
-      <div className="bg-vignette" />
-
-      {/* Evil robot cursor */}
       <EvilCursor />
       <AgentDetectionRing />
-
-      {/* Fixed header chrome */}
       <Navbar />
-
-      {/* Page content */}
       <main>
         <Hero />
+        <Problem />
+        <Solution />
+        <HowItWorks />
         <Features />
-        <Console />
-        <Pricing />
+        <TechnicalDiff />
+        <Demo />
         <CTA />
         <Footer />
       </main>

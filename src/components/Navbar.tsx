@@ -1,122 +1,162 @@
 'use client'
 
+const links = [
+  ['#solution', 'Product'],
+  ['#how-it-works', 'How It Works'],
+  ['#features', 'Features'],
+  ['#demo', 'Demo'],
+] as const
+
 export function Navbar() {
   return (
-    <header
+    <nav
       style={{
         position: 'fixed',
         top: 0,
         left: 0,
         right: 0,
-        zIndex: 50,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '18px 32px',
-        background: 'linear-gradient(180deg, rgba(8,8,10,.85), rgba(8,8,10,0))',
-        backdropFilter: 'blur(8px)',
+        zIndex: 60,
+        height: 76,
+        borderBottom: '1px solid rgba(92,122,185,0.22)',
+        background:
+          'linear-gradient(180deg, rgba(5,10,26,0.92) 0%, rgba(4,8,22,0.85) 78%, rgba(4,8,22,0.52) 100%)',
+        backdropFilter: 'blur(14px)',
+        WebkitBackdropFilter: 'blur(14px)',
       }}
     >
-      {/* Brand */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontWeight: 700, letterSpacing: '.18em', fontSize: 14 }}>
-        <span
-          className="brand-dot"
-          style={{
-            width: 10,
-            height: 10,
-            borderRadius: '50%',
-            background: 'var(--amber)',
-            boxShadow: '0 0 12px var(--amber)',
-            display: 'inline-block',
-          }}
-        />
-        <b style={{ color: 'var(--ink)', fontWeight: 700, fontFamily: 'inherit' }}>
-          Agent<span className="brand-patrol">Patrol</span>
-        </b>
-      </div>
+      <div
+        aria-hidden
+        style={{
+          position: 'absolute',
+          inset: 0,
+          pointerEvents: 'none',
+          background:
+            'radial-gradient(40% 140% at 50% 100%, rgba(39,112,255,0.2), rgba(39,112,255,0.03) 36%, rgba(39,112,255,0) 70%)',
+        }}
+      />
 
-      {/* Nav */}
-      <nav style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+      <div
+        className="container"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          height: '100%',
+          position: 'relative',
+        }}
+      >
+        <span
+          aria-hidden
+          style={{
+            position: 'absolute',
+            left: 10,
+            top: 10,
+            color: 'rgba(64,138,255,0.8)',
+            fontFamily: 'var(--font-jetbrains-mono), ui-monospace, monospace',
+            fontSize: 20,
+            lineHeight: 1,
+          }}
+        >
+          +
+        </span>
+
+        <span
+          aria-hidden
+          style={{
+            position: 'absolute',
+            right: 10,
+            top: 10,
+            color: 'rgba(64,138,255,0.8)',
+            fontFamily: 'var(--font-jetbrains-mono), ui-monospace, monospace',
+            fontSize: 20,
+            lineHeight: 1,
+          }}
+        >
+          +
+        </span>
+
         <a
-          href="#features"
+          href="#top"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 14,
+            color: 'var(--ink)',
+            textTransform: 'uppercase',
+            letterSpacing: '0.22em',
+            fontSize: 13,
+            fontFamily: 'var(--font-space-grotesk), sans-serif',
+            fontWeight: 600,
+          }}
+        >
+          <span
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(3, 8px)',
+              gridTemplateRows: 'repeat(3, 8px)',
+              gap: 2,
+            }}
+            aria-hidden
+          >
+            {[1, 1, 1, 1, 0, 1, 1, 1, 1].map((on, i) => (
+              <span
+                key={i}
+                style={{
+                  width: 8,
+                  height: 8,
+                  background: on ? 'rgba(233,240,251,0.95)' : 'transparent',
+                  border: on ? 'none' : '1px solid rgba(160,180,225,0.35)',
+                }}
+              />
+            ))}
+          </span>
+          AGENTPATROL
+        </a>
+
+        <div
           className="nav-links"
           style={{
-            color: 'var(--ink-dim)',
-            textDecoration: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 16,
+            fontFamily: 'var(--font-space-grotesk), sans-serif',
             fontSize: 12,
-            letterSpacing: '.22em',
+            letterSpacing: '0.2em',
             textTransform: 'uppercase',
-            padding: '10px 14px',
-            borderRadius: 6,
-            transition: 'color .2s, background .2s',
-            fontFamily: 'inherit',
+            color: 'rgba(224,233,248,0.92)',
+            fontWeight: 600,
           }}
-          onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--ink)'; (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(255,255,255,.04)'; }}
-          onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--ink-dim)'; (e.currentTarget as HTMLAnchorElement).style.background = 'transparent'; }}
         >
-          Features
-        </a>
-        <a
-          href="#pricing"
-          className="nav-links"
-          style={{
-            color: 'var(--ink-dim)',
-            textDecoration: 'none',
-            fontSize: 12,
-            letterSpacing: '.22em',
-            textTransform: 'uppercase',
-            padding: '10px 14px',
-            borderRadius: 6,
-            transition: 'color .2s, background .2s',
-            fontFamily: 'inherit',
-          }}
-          onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--ink)'; (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(255,255,255,.04)'; }}
-          onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--ink-dim)'; (e.currentTarget as HTMLAnchorElement).style.background = 'transparent'; }}
-        >
-          Pricing
-        </a>
-        <a
-          href="#docs"
-          className="nav-links"
-          style={{
-            color: 'var(--ink-dim)',
-            textDecoration: 'none',
-            fontSize: 12,
-            letterSpacing: '.22em',
-            textTransform: 'uppercase',
-            padding: '10px 14px',
-            borderRadius: 6,
-            transition: 'color .2s, background .2s',
-            fontFamily: 'inherit',
-          }}
-          onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--ink)'; (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(255,255,255,.04)'; }}
-          onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--ink-dim)'; (e.currentTarget as HTMLAnchorElement).style.background = 'transparent'; }}
-        >
-          Docs
-        </a>
-        <a
-          href="#"
-          style={{
-            color: 'var(--bg)',
-            background: 'var(--amber)',
-            fontWeight: 700,
-            padding: '10px 16px',
-            border: '1px solid var(--amber)',
-            boxShadow: '0 0 0 1px rgba(255,176,32,.2), 0 0 24px rgba(255,176,32,.18)',
-            textDecoration: 'none',
-            fontSize: 12,
-            letterSpacing: '.22em',
-            textTransform: 'uppercase',
-            borderRadius: 6,
-            transition: 'background .2s, color .2s',
-            fontFamily: 'inherit',
-          }}
-          onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = 'var(--amber-2)'; }}
-          onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = 'var(--amber)'; }}
-        >
-          Deploy →
-        </a>
-      </nav>
-    </header>
+          {links.map(([href, label], i) => (
+            <a
+              key={label}
+              href={href}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 16,
+                color: 'inherit',
+                transition: 'color 0.18s ease, text-shadow 0.18s ease',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.color = '#6bb4ff'
+                e.currentTarget.style.textShadow = '0 0 18px rgba(92,173,255,0.5)'
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.color = ''
+                e.currentTarget.style.textShadow = ''
+              }}
+            >
+              {label}
+              {i < links.length - 1 ? (
+                <span aria-hidden style={{ color: 'rgba(85,141,231,0.72)' }}>
+                  /
+                </span>
+              ) : null}
+            </a>
+          ))}
+        </div>
+      </div>
+    </nav>
   )
 }

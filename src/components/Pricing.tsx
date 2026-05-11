@@ -1,50 +1,39 @@
-'use client'
-
-const monoFont = 'var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace, monospace'
-const orbFont = 'var(--font-orbitron), "Orbitron", sans-serif'
-
 const plans = [
   {
-    tier: 'Tier 01',
-    name: 'Recon',
+    tier: '// Tier 01',
+    name: 'Indie',
     price: '$0',
-    period: '/forever',
+    period: '/ forever',
     featured: false,
-    badge: null,
     features: [
       '1 active agent',
-      '10K events / month',
+      '10 K events / month',
       '7-day log retention',
       'Community channel',
     ],
     cta: 'Start free',
-    ctaClass: 'btn-ghost',
   },
   {
-    tier: 'Tier 02',
-    name: 'Patrol',
-    price: '$79',
-    period: '/agent / mo',
+    tier: '// Tier 02',
+    name: 'Team',
+    price: '$49',
+    period: '/ agent / mo',
     featured: true,
-    badge: 'RECOMMENDED',
     features: [
       'Unlimited events',
       '90-day replay buffer',
       'Custom playbooks',
       'SOC 2 Type II evidence',
-      '24/7 paging',
+      '24 / 7 paging',
     ],
-    cta: 'Deploy patrol',
-    ctaClass: 'btn-primary',
-    ctaArr: true,
+    cta: 'Deploy patrol →',
   },
   {
-    tier: 'Tier 03',
-    name: 'Garrison',
+    tier: '// Tier 03',
+    name: 'Enterprise',
     price: 'Custom',
     period: '',
     featured: false,
-    badge: null,
     features: [
       'Air-gapped deploy',
       'On-prem control plane',
@@ -53,183 +42,78 @@ const plans = [
       'FedRAMP roadmap',
     ],
     cta: 'Contact ops',
-    ctaClass: 'btn-ghost',
   },
 ]
 
 export function Pricing() {
   return (
-    <section id="pricing" style={{ padding: '120px 0', position: 'relative', zIndex: 5 }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 32px' }}>
-        {/* Section header */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'flex-end',
-            justifyContent: 'space-between',
-            marginBottom: 48,
-            gap: 32,
-            flexWrap: 'wrap',
-          }}
-        >
+    <section id="pricing" style={{ padding: '130px 0', position: 'relative', zIndex: 5 }}>
+      <div className="container">
+        <div className="section-head">
           <div>
-            <div className="sec-eyebrow">// DEPLOYMENT TIERS</div>
-            <h2
-              className="sec-title-lg"
-              style={{
-                fontFamily: orbFont,
-                fontWeight: 800,
-                fontSize: 56,
-                letterSpacing: '.02em',
-                margin: '8px 0 0',
-                lineHeight: 1,
-                color: 'var(--ink)',
-              }}
-            >
-              Pick a patrol size.
+            <div className="eyebrow"><span className="dot" />// Deployment tiers</div>
+            <h2 className="section-title" style={{ marginTop: 20 }}>
+              Pick a<br />patrol size.
             </h2>
           </div>
-          <p
-            style={{
-              fontFamily: monoFont,
-              color: 'var(--ink-dim)',
-              maxWidth: 480,
-              fontSize: 14,
-              lineHeight: 1.7,
-            }}
-          >
+          <p className="lede">
             Start with one agent, scale to a global swarm. Every tier ships with the full detection engine — only the volume changes.
           </p>
         </div>
 
-        {/* Pricing grid */}
-        <div
-          className="price-grid-3"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: 1,
-            background: 'var(--line)',
-            border: '1px solid var(--line)',
-          }}
-        >
+        <div className="pricing-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1, background: 'var(--line)' }}>
           {plans.map((plan) => (
             <div
               key={plan.name}
-              className={plan.featured ? 'featured-glow' : ''}
-              style={{
-                background: plan.featured ? '#0e0e12' : 'var(--bg-2)',
-                padding: '40px 32px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 20,
-                position: 'relative',
-                borderTop: plan.featured ? '2px solid var(--amber)' : undefined,
-              }}
+              className={`glass price-card${plan.featured ? ' featured' : ''}`}
             >
-              {plan.badge && (
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    right: 24,
-                    transform: 'translateY(-50%)',
-                    background: 'var(--amber)',
-                    color: '#111',
-                    fontFamily: orbFont,
-                    fontWeight: 700,
-                    fontSize: 10,
-                    letterSpacing: '.2em',
-                    padding: '6px 10px',
-                    boxShadow: '0 0 20px rgba(255,176,32,0.6), 0 0 40px rgba(255,176,32,0.25)',
-                  }}
-                >
-                  {plan.badge}
-                </div>
-              )}
-
-              <div
-                style={{
-                  fontFamily: monoFont,
-                  fontSize: 11,
-                  color: 'var(--amber)',
-                  letterSpacing: '.3em',
-                  textTransform: 'uppercase',
-                }}
-              >
+              <div style={{
+                fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase',
+                color: plan.featured ? 'var(--green)' : 'var(--ink-3)',
+                fontFamily: 'var(--font-jetbrains-mono), ui-monospace, monospace',
+              }}>
                 {plan.tier}
               </div>
 
-              <h3
-                style={{
-                  fontFamily: orbFont,
-                  fontWeight: 800,
-                  fontSize: 28,
-                  margin: 0,
-                  letterSpacing: '.04em',
-                  color: 'var(--ink)',
-                }}
-              >
+              <h3 style={{
+                fontFamily: 'var(--font-space-grotesk), "Space Grotesk", sans-serif',
+                fontWeight: 500, fontSize: 28, letterSpacing: '-0.01em',
+                margin: '14px 0 0', color: 'var(--ink)',
+              }}>
                 {plan.name}
               </h3>
 
-              <div
-                style={{
-                  fontFamily: orbFont,
-                  fontWeight: 800,
-                  fontSize: 56,
-                  lineHeight: 1,
-                  letterSpacing: '.02em',
-                  color: '#fff',
-                  textShadow: plan.featured ? '0 0 24px rgba(255,176,32,0.35)' : 'none',
-                }}
-              >
-                {plan.price}
+              <div style={{ margin: '20px 0', display: 'flex', alignItems: 'baseline', gap: 6 }}>
+                <span style={{
+                  fontFamily: 'var(--font-space-grotesk), "Space Grotesk", sans-serif',
+                  fontWeight: 700, fontSize: 52, lineHeight: 1, letterSpacing: '-0.02em',
+                  color: plan.featured ? 'var(--green)' : 'var(--ink)',
+                  textShadow: plan.featured ? '0 0 30px rgba(94,179,255,0.4)' : 'none',
+                }}>
+                  {plan.price}
+                </span>
                 {plan.period && (
-                  <small
-                    style={{
-                      fontFamily: monoFont,
-                      fontSize: 13,
-                      fontWeight: 400,
-                      color: 'var(--ink-dim)',
-                      letterSpacing: '.04em',
-                      marginLeft: 6,
-                    }}
-                  >
+                  <span style={{ fontSize: 13, color: 'var(--ink-3)', letterSpacing: '0.04em' }}>
                     {plan.period}
-                  </small>
+                  </span>
                 )}
               </div>
 
-              <ul
-                style={{
-                  listStyle: 'none',
-                  padding: 0,
-                  margin: 0,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 10,
-                  fontFamily: monoFont,
-                  fontSize: 13,
-                  color: 'var(--ink-dim)',
-                  flex: 1,
-                }}
-              >
-                {plan.features.map((f) => (
-                  <li key={f} className="plan-list-item">{f}</li>
+              <ul style={{
+                listStyle: 'none', padding: 0, margin: '0 0 28px',
+                display: 'flex', flexDirection: 'column', gap: 10,
+                fontSize: 13, color: 'var(--ink-2)', flex: 1,
+                fontFamily: 'var(--font-jetbrains-mono), ui-monospace, monospace',
+              }}>
+                {plan.features.map(f => (
+                  <li key={f} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                    <span style={{ color: 'var(--green)', flexShrink: 0 }}>→</span>
+                    {f}
+                  </li>
                 ))}
               </ul>
 
-              <a
-                href="#"
-                className={`btn ${plan.ctaClass}`}
-                style={{ justifyContent: 'center' }}
-              >
-                {plan.cta}
-                {plan.ctaArr && (
-                  <span style={{ fontFamily: monoFont, fontWeight: 400 }}>→</span>
-                )}
-              </a>
+              <a href="#cta" className="cta-link">{plan.cta}</a>
             </div>
           ))}
         </div>

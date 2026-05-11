@@ -1,274 +1,183 @@
 'use client'
+import { useEffect, useState } from 'react'
 import { SceneWrapper } from './SceneWrapper'
 
-export function Hero() {
+const mono = 'var(--font-jetbrains-mono), ui-monospace, monospace'
+
+function HudCard({ style, accent, label, children }: {
+  style: React.CSSProperties
+  accent: string
+  label: string
+  children: React.ReactNode
+}) {
   return (
-    <section
-      style={{
-        position: 'relative',
+    <div style={{
+      position: 'absolute',
+      background: 'rgba(6,14,34,0.88)',
+      border: `1px solid ${accent}33`,
+      backdropFilter: 'blur(14px)',
+      padding: '10px 14px',
+      fontFamily: mono,
+      zIndex: 10,
+      ...style,
+    }}>
+      <div style={{ fontSize: 9, letterSpacing: '0.18em', color: accent, display: 'flex', alignItems: 'center', gap: 6, marginBottom: 7, textTransform: 'uppercase' }}>
+        <span style={{ width: 5, height: 5, borderRadius: '50%', background: accent, boxShadow: `0 0 6px ${accent}`, flexShrink: 0, animation: 'pulse 1.6s ease infinite' }} />
+        {label}
+      </div>
+      <div style={{ fontSize: 12, color: 'var(--ink)', whiteSpace: 'nowrap' }}>{children}</div>
+    </div>
+  )
+}
+
+export function Hero() {
+  const [tick, setTick] = useState(true)
+  const [blocked, setBlocked] = useState(2481)
+
+  useEffect(() => {
+    const id = setInterval(() => setTick(t => !t), 530)
+    return () => clearInterval(id)
+  }, [])
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      if (Math.random() < 0.4) setBlocked(n => n + 1)
+    }, 1100)
+    return () => clearInterval(id)
+  }, [])
+
+
+  return (
+    <section id="top" style={{ position: 'relative', minHeight: '100vh', overflow: 'hidden', background: 'var(--bg-1)' }}>
+
+      {/* Subtle blue grid */}
+      <div style={{
+        position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 1,
+        backgroundImage: 'linear-gradient(rgba(94,179,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(94,179,255,0.04) 1px, transparent 1px)',
+        backgroundSize: '64px 64px',
+        maskImage: 'radial-gradient(ellipse 90% 80% at 50% 50%, black 30%, transparent 80%)',
+        WebkitMaskImage: 'radial-gradient(ellipse 90% 80% at 50% 50%, black 30%, transparent 80%)',
+      }} />
+
+      {/* Blue ambient orb behind robot */}
+      <div style={{
+        position: 'absolute', left: '50%', top: '42%',
+        transform: 'translate(-50%, -50%)',
+        width: 700, height: 700, borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(20,80,200,0.38) 0%, rgba(10,40,130,0.18) 40%, transparent 70%)',
+        filter: 'blur(48px)',
+        pointerEvents: 'none', zIndex: 0,
+        animation: 'pulse-glow 5s ease-in-out infinite',
+      }} />
+
+      {/* ── Corner labels ── */}
+      <div style={{ position: 'absolute', top: 90, left: 28, fontFamily: mono, fontSize: 10, color: 'rgba(94,179,255,0.35)', letterSpacing: '0.12em', zIndex: 10 }}>S-01</div>
+      <div style={{ position: 'absolute', top: 90, right: 28, fontFamily: mono, fontSize: 10, color: 'rgba(94,179,255,0.35)', letterSpacing: '0.12em', textAlign: 'right', zIndex: 10, lineHeight: 1.8 }}>
+        v3.3<br /><span style={{ opacity: 0.55 }}>01001 // index</span>
+      </div>
+
+      {/* ── Side rails ── */}
+      <div style={{
+        position: 'absolute', left: 10, top: '50%',
+        transform: 'translateY(-50%) rotate(-90deg)',
+        fontFamily: mono, fontSize: 9, letterSpacing: '0.22em',
+        color: 'rgba(94,179,255,0.22)', whiteSpace: 'nowrap', zIndex: 10,
+      }}>
+        AGENTPATROL &mdash; INDEX 0.42 &mdash; 2026 &mdash;
+      </div>
+      <div style={{
+        position: 'absolute', right: 10, top: '50%',
+        transform: 'translateY(-50%) rotate(90deg)',
+        fontFamily: mono, fontSize: 9, letterSpacing: '0.22em',
+        color: 'rgba(94,179,255,0.22)', whiteSpace: 'nowrap', zIndex: 10,
+      }}>
+        PATROLS ACTIVE &mdash; LIVE &mdash; 24/7 &mdash;
+      </div>
+
+      {/* ── Floating binary decorations ── */}
+      {[
+        { text: '10011000_', left: '27%',  top:  '20%' },
+        { text: '119100_',   right: '25%', top:  '28%' },
+        { text: '11100_',    right: '34%', top:  '54%' },
+        { text: '000',       right: '26%', bottom: '24%' },
+      ].map(({ text, ...pos }) => (
+        <div key={text} style={{
+          position: 'absolute', ...pos,
+          fontFamily: mono, fontSize: 11,
+          color: 'rgba(94,179,255,0.2)', letterSpacing: '0.15em',
+          zIndex: 2, pointerEvents: 'none',
+        }}>{text}</div>
+      ))}
+
+      {/* ── HUD cards ── */}
+      <HudCard style={{ left: '26%', top: '22%' }} accent="var(--blue)" label="Session · Live">
+        agent_047 · llm runtime{' '}
+        <span style={{ color: 'var(--blue)', fontWeight: 700 }}>ACTIVE</span>
+      </HudCard>
+
+      <HudCard style={{ right: '14%', top: '32%' }} accent="#ff4d57" label="Breach · Detected">
+        {blocked.toLocaleString()} threats{' '}
+        <span style={{ color: '#ff4d57', fontWeight: 700 }}>BLOCKED</span>
+      </HudCard>
+
+      <HudCard style={{ right: '18%', top: '54%' }} accent="var(--blue)" label="Runtime Policy · Enforced">
+        call intercepted{' '}
+        <span style={{ color: 'var(--blue)', fontWeight: 700 }}>SAFE ↑</span>
+      </HudCard>
+
+      {/* ── 3D Robot ── */}
+      <div style={{
+        position: 'absolute',
+        left: '50%', top: '44%',
+        transform: 'translate(-50%, -50%)',
+        width: 'min(74vw, 980px)',
+        height: 'min(95vh, 1100px)',
         zIndex: 5,
-        minHeight: '100vh',
-        padding: '160px 32px 120px',
-        display: 'grid',
-        gridTemplateColumns: '1fr',
-        placeItems: 'center',
-      }}
-    >
-      <div
-        style={{
-          position: 'relative',
-          width: '100%',
-          maxWidth: 1400,
-          margin: '0 auto',
-          display: 'grid',
-          gridTemplateColumns: '1fr',
-          gap: 0,
-        }}
-      >
-        {/* Tag */}
-        <div className="hero-tag">
-          CLASSIFIED // AUTONOMOUS DEFENSE LAYER
-        </div>
-
-        {/* Title */}
-        <h1
-          className="hero-h1-anim"
-          style={{
-            textAlign: 'center',
-            fontWeight: 800,
-            letterSpacing: '.04em',
-            lineHeight: 0.95,
-            fontSize: 'clamp(56px, 9vw, 148px)',
-            margin: 0,
-            background: 'linear-gradient(180deg,#fff 0%, #d8d8de 60%, #6e6e76 100%)',
-            WebkitBackgroundClip: 'text',
-            backgroundClip: 'text',
-            color: 'transparent',
-          }}
-        >
-          AGENTS DON&apos;T<br />
-          <span className="patrol-shimmer">
-            SLEEP. PATROL.
-          </span>
-        </h1>
-
-        {/* Subtitle */}
-        <p
-          className="hero-subtitle-anim"
-          style={{
-            textAlign: 'center',
-            maxWidth: 760,
-            margin: '28px auto 0',
-            color: 'var(--ink-dim)',
-            fontFamily: 'var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace, monospace',
-            fontSize: 16,
-            lineHeight: 1.7,
-            letterSpacing: '.02em',
-          }}
-        >
-          AgentPatrol deploys <b style={{ color: 'var(--ink)', fontWeight: 600 }}>autonomous security agents</b> across your stack — monitoring traffic, detecting anomalies, and neutralizing threats in real time.{' '}
-          <b style={{ color: 'var(--ink)', fontWeight: 600 }}>Zero alerts. Zero downtime. Zero mercy.</b>
-        </p>
-
-        {/* Hero art — Scene replaces the robot image */}
-        <div
-          id="hero-robot-art"
-          className="hero-art-anim"
-          style={{
-            position: 'relative',
-            margin: '48px auto 0',
-            width: 'min(720px, 90vw)',
-            aspectRatio: '800/900',
-          }}
-        >
-          {/* HUD corners */}
-          <span style={{ position: 'absolute', width: 90, height: 90, border: '1px solid var(--amber)', opacity: .7, zIndex: 3, top: 0, left: 0, borderRight: 'none', borderBottom: 'none' }} />
-          <span style={{ position: 'absolute', width: 90, height: 90, border: '1px solid var(--amber)', opacity: .7, zIndex: 3, top: 0, right: 0, borderLeft: 'none', borderBottom: 'none' }} />
-          <span style={{ position: 'absolute', width: 90, height: 90, border: '1px solid var(--amber)', opacity: .7, zIndex: 3, bottom: 0, left: 0, borderRight: 'none', borderTop: 'none' }} />
-          <span style={{ position: 'absolute', width: 90, height: 90, border: '1px solid var(--amber)', opacity: .7, zIndex: 3, bottom: 0, right: 0, borderLeft: 'none', borderTop: 'none' }} />
-
-          {/* HUD labels */}
-          <span
-            className="hud-glow"
-            style={{
-              position: 'absolute',
-              fontFamily: 'var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace, monospace',
-              fontSize: 10,
-              letterSpacing: '.2em',
-              color: 'var(--amber)',
-              textTransform: 'uppercase',
-              zIndex: 4,
-              top: -22,
-              left: 0,
-            }}
-          >
-            UNIT-04 // POLICE PATROL
-          </span>
-          <span
-            className="hud-glow"
-            style={{
-              position: 'absolute',
-              fontFamily: 'var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace, monospace',
-              fontSize: 10,
-              letterSpacing: '.2em',
-              color: 'var(--amber)',
-              textTransform: 'uppercase',
-              zIndex: 4,
-              top: '50%',
-              right: -8,
-              transform: 'translateY(-50%) rotate(90deg)',
-              transformOrigin: 'right center',
-            }}
-          >
-            TARGET LOCK
-          </span>
-          <span
-            className="hud-glow"
-            style={{
-              position: 'absolute',
-              fontFamily: 'var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace, monospace',
-              fontSize: 10,
-              letterSpacing: '.2em',
-              color: 'var(--amber)',
-              textTransform: 'uppercase',
-              zIndex: 4,
-              bottom: -22,
-              right: 0,
-            }}
-          >
-            SECURE / ARMED
-          </span>
-
-          {/* Rings */}
-          <div
-            style={{
-              position: 'absolute',
-              left: '50%',
-              top: '55%',
-              transform: 'translate(-50%,-50%)',
-              width: '120%',
-              aspectRatio: '1/1',
-              borderRadius: '50%',
-              border: '1px solid rgba(255,176,32,.18)',
-              background: 'radial-gradient(circle, rgba(255,176,32,.08), transparent 60%)',
-              zIndex: 1,
-            }}
-          />
-          <div
-            style={{
-              position: 'absolute',
-              left: '50%',
-              top: '55%',
-              transform: 'translate(-50%,-50%)',
-              width: '80%',
-              aspectRatio: '1/1',
-              borderRadius: '50%',
-              border: '1px solid rgba(255,176,32,.1)',
-              background: 'none',
-              zIndex: 1,
-            }}
-          />
-          <div
-            style={{
-              position: 'absolute',
-              left: '50%',
-              top: '55%',
-              transform: 'translate(-50%,-50%)',
-              width: '46%',
-              aspectRatio: '1/1',
-              borderRadius: '50%',
-              border: '1px solid rgba(255,176,32,.08)',
-              background: 'none',
-              zIndex: 1,
-            }}
-          />
-
-          {/* Left spec readouts */}
-          <div
-            className="specs-side"
-            style={{
-              position: 'absolute',
-              left: -40,
-              top: '30%',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 14,
-              zIndex: 4,
-            }}
-          >
-            <div className="spec-row-left"><span>STATUS · <b style={{ color: 'var(--amber)', fontWeight: 600 }}>ACTIVE</b></span></div>
-            <div className="spec-row-left"><span>POWER · <b style={{ color: 'var(--amber)', fontWeight: 600 }}>98%</b></span></div>
-            <div className="spec-row-left"><span>RANGE · <b style={{ color: 'var(--amber)', fontWeight: 600 }}>2.4 KM</b></span></div>
-          </div>
-
-          {/* Right spec readouts */}
-          <div
-            className="specs-side"
-            style={{
-              position: 'absolute',
-              right: -40,
-              top: '30%',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 14,
-              zIndex: 4,
-              alignItems: 'flex-end',
-            }}
-          >
-            <div className="spec-row-right"><span>THREAT · <b style={{ color: 'var(--amber)', fontWeight: 600 }}>0 / 0</b></span></div>
-            <div className="spec-row-right"><span>SCAN · <b style={{ color: 'var(--amber)', fontWeight: 600 }}>240 Hz</b></span></div>
-            <div className="spec-row-right"><span>RESPONSE · <b style={{ color: 'var(--amber)', fontWeight: 600 }}>12 ms</b></span></div>
-          </div>
-
-          {/* Scene — replaces the robot image */}
-          <div style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 2 }}>
-            <SceneWrapper />
-          </div>
-        </div>
-
-        {/* CTA buttons */}
-        <div
-          className="hero-cta-anim"
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            gap: 14,
-            marginTop: 48,
-            flexWrap: 'wrap',
-            position: 'relative',
-            zIndex: 5,
-          }}
-        >
-          <a href="#" className="btn btn-primary">
-            Deploy An Agent <span style={{ fontFamily: 'var(--font-jetbrains-mono), monospace', fontWeight: 400 }}>→</span>
-          </a>
-          <a href="#docs" className="btn btn-ghost">
-            Read The Docs
-          </a>
-        </div>
-
-        {/* Meta stats */}
-        <div
-          className="hero-stats-anim"
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            gap: 48,
-            marginTop: 48,
-            flexWrap: 'wrap',
-            fontFamily: 'var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace, monospace',
-            fontSize: 11,
-            letterSpacing: '.16em',
-            textTransform: 'uppercase',
-            color: 'var(--ink-mute)',
-          }}
-        >
-          <div><span style={{ color: 'var(--ink)', marginRight: 6 }}>Deployed</span> 12,400+ orgs</div>
-          <div><span style={{ color: 'var(--ink)', marginRight: 6 }}>Threats stopped</span> 9.2M / day</div>
-          <div><span style={{ color: 'var(--ink)', marginRight: 6 }}>Mean response</span> 12ms</div>
-          <div><span style={{ color: 'var(--ink)', marginRight: 6 }}>SOC 2</span> Type II</div>
+        pointerEvents: 'none',
+      }}>
+        <div style={{ width: '100%', height: '100%', pointerEvents: 'auto' }}>
+          <SceneWrapper />
         </div>
       </div>
+
+      {/* ── Eyebrow ── */}
+      <div style={{
+        position: 'absolute', bottom: '37%', left: '4%',
+        fontFamily: mono, fontSize: 11, letterSpacing: '0.2em',
+        color: 'var(--ink-3)', zIndex: 6,
+      }}>
+        AI AGENT GOVERNANCE PLATFORM{' '}
+        <span style={{ opacity: tick ? 1 : 0, transition: 'opacity 0.1s' }}>▌</span>
+      </div>
+
+      {/* ── Massive headline ── */}
+      <h1 style={{
+        position: 'absolute', bottom: 0, left: 0, right: 0,
+        margin: 0, padding: '0 3.5vw 0.5vw',
+        fontFamily: 'var(--font-space-grotesk), sans-serif',
+        fontWeight: 900,
+        fontSize: 'clamp(58px, 13.5vw, 208px)',
+        lineHeight: 0.88,
+        letterSpacing: '-0.025em',
+        color: 'var(--ink)',
+        textTransform: 'uppercase',
+        zIndex: 4,
+        userSelect: 'none',
+      }}>
+        Govern<br />Your Agents
+      </h1>
+
+      {/* ── Blue bar + EN ── */}
+      <div style={{ position: 'absolute', bottom: 28, left: 28, zIndex: 10 }}>
+        <div style={{
+          width: 110, height: 3,
+          background: 'var(--blue)',
+          boxShadow: '0 0 14px rgba(94,179,255,0.7)',
+          marginBottom: 8,
+        }} />
+        <div style={{ fontFamily: mono, fontSize: 9, letterSpacing: '0.18em', color: 'rgba(94,179,255,0.4)' }}>EN</div>
+      </div>
+
     </section>
   )
 }
